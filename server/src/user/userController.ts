@@ -11,11 +11,9 @@ const generateToken = async (res: Response, user: User, next: NextFunction) => {
     const token = sign({ sub: user._id }, config.jwtSecret as string, {
       expiresIn: config.jwtExpire,
     });
-    res.status(201).json({
-      accessToken: token,
-    });
+    return token;
   } catch (error) {
-    return next(createHttpError(500,'Error while signing token'))
+    return next(createHttpError(500, "Error while signing token"));
   }
 };
 
@@ -47,14 +45,19 @@ export const signIn = async (
     if (!newUser) {
       return next(createHttpError(400, "Error while saving user."));
     }
+    const accessToken = await generateToken(res, newUser, next);
+    res.cookie("token", accessToken, {
+      maxAge: 1000 * 60 * 60 * 24 * 10,
+      httpOnly: true,
+      sameSite: "none",
+      secure: true,
+    });
     res.status(201).json({
       success: true,
-      message: "User successfully created.",
-      data: {
-        user_id: newUser._id,
-      },
+      message: `User Sign in successfully! Welcome ${newUser?.username}`,
     });
   } catch (error) {
+    console.log("Error:",error)
     return next(
       createHttpError(
         500,
