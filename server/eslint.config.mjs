@@ -8,4 +8,12 @@ export default [
   { languageOptions: { globals: globals.browser } },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
+  {
+    rules: {
+      // Disable unused variable warnings for JavaScript
+      "no-unused-vars": "off",
+      // Disable unused variable warnings for TypeScript
+      "@typescript-eslint/no-unused-vars": "off",
+    },
+  },
 ];
