@@ -61,12 +61,8 @@ export const signIn = tryCatchHandler(
   }
 );
 
-export const loginUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
+export const loginUser = tryCatchHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
     if (!email || !password) {
       return next(createHttpError(400, "Email and Password are required."));
@@ -85,7 +81,30 @@ export const loginUser = async (
       success: true,
       message: "User login successfully",
     });
-  } catch (error) {
-    return next(createHttpError(500, "Error while login in."));
   }
-};
+);
+
+export const getUserDetails = tryCatchHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    if (!id) {
+      return next(createHttpError(400, "Id is required."));
+    }
+    const user = await userModel
+      .findById(id)
+      .populate("followers")
+      .populate({
+        path: "threads",
+        populate: [{ path: "likes" }, { path: "comments" }, { path: "admin" }],
+      })
+      .populate({
+        path: "replies",
+        populate: [{ path: "post" }, { path: "admin" }],
+      })
+      .populate({
+        path: "reposts",
+        populate: [{ path: "likes" }, { path: "comments" }, { path: "admin" }],
+      });
+    res.status(200).json({ success: true, user });
+  }
+);
