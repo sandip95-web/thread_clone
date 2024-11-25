@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
 import userModel from "./userModel";
 import bcrypt from "bcrypt";
-import { sign, verify } from "jsonwebtoken";
+import { sign} from "jsonwebtoken";
 import { User } from "./userType";
 import { config } from "../config/config";
 import tryCatchHandler from "../utils/tryCatchHandler";
@@ -123,7 +123,7 @@ export const followUser = tryCatchHandler(
       return next(createHttpError(400, "User doesn't exist."));
     }
     const _req = req as AuthRequest;
-    if (userExist.followers.includes(_req.user._id)) {
+    if (userExist.followers.includes((_req.user._id).toString())) {
       await userModel.findByIdAndUpdate(
         userExist._id,
         {
