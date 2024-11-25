@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import { sign, verify } from "jsonwebtoken";
 import { User } from "./userType";
 import { config } from "../config/config";
+import tryCatchHandler from "../utils/tryCatchHandler";
 
 const generateToken = async (res: Response, user: User, next: NextFunction) => {
   try {
@@ -22,12 +23,8 @@ const generateToken = async (res: Response, user: User, next: NextFunction) => {
   }
 };
 
-export const signIn = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
+export const signIn = tryCatchHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
     const { username, email, password } = req.body;
     //validating if the field are empty or not
     if (!username || !email || !password) {
@@ -61,15 +58,8 @@ export const signIn = async (
       success: true,
       message: `User Sign in successfully! Welcome ${newUser?.username}`,
     });
-  } catch (error) {
-    return next(
-      createHttpError(
-        500,
-        "An error occurred while processing your request. Please try again later."
-      )
-    );
   }
-};
+);
 
 export const loginUser = async (
   req: Request,
