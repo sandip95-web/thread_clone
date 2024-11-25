@@ -220,3 +220,15 @@ export const searchUser = tryCatchHandler(
     res.status(200).json(users);
   }
 );
+
+export const logoutUser = tryCatchHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    res.cookie("token", "", {
+      maxAge: Date.now(),
+      httpOnly: true,
+      sameSite: "none",
+      secure: true,
+    });
+    res.status(201).json({ message: "Logged out successfully." });
+  }
+);

@@ -3,6 +3,7 @@ import {
   followUser,
   getUserDetails,
   loginUser,
+  logoutUser,
   searchUser,
   signIn,
   updateProfile,
@@ -13,9 +14,10 @@ const userRouter = express.Router();
 
 userRouter.post("/signin", signIn);
 userRouter.post("/login", loginUser);
-userRouter.post("/:id", Auth, getUserDetails);
+userRouter.get("/:id", Auth, getUserDetails);
 userRouter.put("/follow/:id", Auth, followUser);
 userRouter.put("/update", Auth, updateProfile);
 userRouter.get("/search/:query", Auth, searchUser);
+userRouter.post("/logout", Auth, logoutUser);
 
 export default userRouter;
