@@ -17,18 +17,22 @@ const Auth = tryCatchHandler(
       return next(createHttpError(400, "Token is required."));
     }
     const decoded = verify(token, config.jwtSecret as string);
-    const user = await userModel
-      .findById(decoded.sub)
-      .populate("followers")
-      // .populate("threads")
-      // .populate("replies")
-      // .populate("reposts");
+    if (!decoded) {
+      return next(createHttpError(400, "Invalid or expired token."));
+    }
+
+    const user = await userModel.findById(decoded.sub);
+    // .populate("followers")
+    // .populate("threads")
+    // .populate("replies")
+    // .populate("reposts");
     if (!user) {
       return next(createHttpError(400, "User not found."));
     }
+  
     const _req = req as AuthRequest;
     _req.user = user;
-  
+
     next();
   }
 );

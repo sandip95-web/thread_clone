@@ -232,3 +232,13 @@ export const logoutUser = tryCatchHandler(
     res.status(201).json({ message: "Logged out successfully." });
   }
 );
+
+export const myInfo = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const _req=req as AuthRequest
+  res.status(200).json({data:_req.user})
+};
+
