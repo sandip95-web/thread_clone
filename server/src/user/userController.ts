@@ -171,7 +171,6 @@ export const updateProfile = tryCatchHandler(
       }
 
       try {
-       
         if (fields.text) {
           userExist.bio = fields.text.toString();
         }
@@ -205,5 +204,19 @@ export const updateProfile = tryCatchHandler(
         next(createHttpError(500, "Error updating profile."));
       }
     });
+  }
+);
+
+export const searchUser = tryCatchHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { query } = req.params;
+
+    const users = await userModel.find({
+      $or: [
+        { username: { $regex: query, $options: "i" } },
+        { email: { $regex: query, $options: "i" } },
+      ],
+    });
+    res.status(200).json(users);
   }
 );
