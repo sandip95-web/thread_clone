@@ -108,3 +108,4 @@ export const getUserDetails = tryCatchHandler(
     res.status(200).json({ success: true, user });
   }
 );
+
