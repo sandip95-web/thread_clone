@@ -7,6 +7,8 @@ import { User } from "./userType";
 import { config } from "../config/config";
 import tryCatchHandler from "../utils/tryCatchHandler";
 import { AuthRequest } from "../middleware/auth";
+import formidable, { Fields, Files } from "formidable";
+import cloudinary from "../config/cloudinary";
 
 const generateToken = async (res: Response, user: User, next: NextFunction) => {
   try {
@@ -148,6 +150,60 @@ export const followUser = tryCatchHandler(
     }
     res.status(201).json({
       message: `Followed ${userExist.username}`,
+    });
+  }
+);
+
+export const updateProfile = tryCatchHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const _req = req as AuthRequest;
+    const userExist = await userModel.findById(_req.user._id);
+
+    if (!userExist) {
+      return next(createHttpError(400, "No such user exists."));
+    }
+
+    const form = formidable({ keepExtensions: true });
+
+    form.parse(req, async (err, fields: Fields, files: Files) => {
+      if (err) {
+        return next(createHttpError(400, "Error in parsing form data."));
+      }
+
+      try {
+       
+        if (fields.text) {
+          userExist.bio = fields.text.toString();
+        }
+
+        const mediaFile = files.media as formidable.File | undefined;
+
+        if (mediaFile) {
+          // Remove the old image from Cloudinary if it exists
+          if (userExist.public_id) {
+            await cloudinary.uploader.destroy(userExist.public_id);
+          }
+
+          // Upload new image to Cloudinary
+          const uploadedImage = await cloudinary.uploader.upload(
+            mediaFile.filepath,
+            {
+              folder: "Thread_clone/Profiles",
+            }
+          );
+
+          await userModel.findByIdAndUpdate(userExist._id, {
+            public_id: uploadedImage.public_id,
+            profilePic: uploadedImage.secure_url,
+          });
+        }
+
+        res.status(200).json({
+          message: "Profile updated successfully.",
+        });
+      } catch (error) {
+        next(createHttpError(500, "Error updating profile."));
+      }
     });
   }
 );

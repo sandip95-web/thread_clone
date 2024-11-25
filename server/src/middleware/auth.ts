@@ -20,14 +20,15 @@ const Auth = tryCatchHandler(
     const user = await userModel
       .findById(decoded.sub)
       .populate("followers")
-      .populate("threads")
-      .populate("replies")
-      .populate("reposts");
+      // .populate("threads")
+      // .populate("replies")
+      // .populate("reposts");
     if (!user) {
       return next(createHttpError(400, "User not found."));
     }
     const _req = req as AuthRequest;
     _req.user = user;
+  
     next();
   }
 );
