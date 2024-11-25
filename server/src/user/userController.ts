@@ -6,6 +6,7 @@ import { sign, verify } from "jsonwebtoken";
 import { User } from "./userType";
 import { config } from "../config/config";
 import tryCatchHandler from "../utils/tryCatchHandler";
+import { AuthRequest } from "../middleware/auth";
 
 const generateToken = async (res: Response, user: User, next: NextFunction) => {
   try {
@@ -109,3 +110,44 @@ export const getUserDetails = tryCatchHandler(
   }
 );
 
+export const followUser = tryCatchHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    if (!id) {
+      return next(createHttpError(400, "Id is required."));
+    }
+    const userExist = await userModel.findById(id);
+    if (!userExist) {
+      return next(createHttpError(400, "User doesn't exist."));
+    }
+    const _req = req as AuthRequest;
+    if (userExist.followers.includes(_req.user._id)) {
+      await userModel.findByIdAndUpdate(
+        userExist._id,
+        {
+          $pull: { followers: _req.user._id },
+        },
+        {
+          new: true,
+        }
+      );
+      res.status(201).json({
+        message: `Unfollowed ${userExist.username}`,
+      });
+    } else {
+      //if  user is not in the followers
+      await userModel.findByIdAndUpdate(
+        userExist._id,
+        {
+          $push: { followers: _req.user._id },
+        },
+        {
+          new: true,
+        }
+      );
+    }
+    res.status(201).json({
+      message: `Followed ${userExist.username}`,
+    });
+  }
+);
