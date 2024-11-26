@@ -21,15 +21,16 @@ const Auth = tryCatchHandler(
       return next(createHttpError(400, "Invalid or expired token."));
     }
 
-    const user = await userModel.findById(decoded.sub);
-    // .populate("followers")
-    // .populate("threads")
-    // .populate("replies")
-    // .populate("reposts");
+    const user = await userModel
+      .findById(decoded.sub)
+      .populate("followers")
+      .populate("threads")
+      .populate("replies")
+      .populate("reposts");
     if (!user) {
       return next(createHttpError(400, "User not found."));
     }
-  
+
     const _req = req as AuthRequest;
     _req.user = user;
 

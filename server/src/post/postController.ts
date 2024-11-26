@@ -177,3 +177,24 @@ export const repost = tryCatchHandler(
     res.status(201).json({ message: "Reposted" });
   }
 );
+
+export const singlePostDetail = tryCatchHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    const _req = req as AuthRequest;
+    if (!id) {
+      return next(createHttpError(400, "Id is required."));
+    }
+    const post = await postModel
+      .findById(id)
+      .populate("admin")
+      .populate("likes")
+      .populate({
+        path: "comments",
+        populate: {
+          path: "admin",
+        },
+      });
+    res.status(201).json({ message: "Post fetched!",post });
+  }
+);
