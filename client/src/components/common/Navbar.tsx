@@ -23,7 +23,9 @@ const Navbar = () => {
         </Link>
         <TbEdit size={32} />
         <CiHeart size={32} />
-        <RxAvatar size={32} />
+        <Link to={"/profile/threads/1"}>
+          <RxAvatar size={32} />
+        </Link>
       </Stack>
     </>
   );
