@@ -1,10 +1,11 @@
+import SearchInput from "../../components/search/SearchInput"
 
 
 const Search = () => {
   return (
-    <div>
-      Search
-    </div>
+    <>
+      <SearchInput/>
+    </>
   )
 }
 
