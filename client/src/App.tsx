@@ -1,27 +1,24 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Loading from "./components/common/Loading";
-import Home from "./pages/Protected/Home";
-import { FC, lazy, Suspense } from "react";
-import Header from './components/Header'
-import Error from "./pages/Error";
-const User = lazy(() => import("./pages/User"));
-const Contact = lazy(() => import("./pages/Contact"));
-const Search = lazy(() => import("./pages/Protected/Search"));
+import { FC, lazy } from "react";
+
+
+// Create a custom theme
+
+const Register = lazy(() => import("./pages/Register"));
 const App: FC = () => {
   return (
     <div>
-      <BrowserRouter>
+      <Register/>
+      {/* <BrowserRouter>
         <Suspense fallback={<Loading />}>
         <Header/>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/search" element={<Search />} />
-            <Route path="/user" element={<User />} />
-            <Route path="/contact" element={<Contact />} />
+            <Route path="/register" element={<Register />} />
             <Route path="*" element={<Error />} />
           </Routes>
         </Suspense>
-      </BrowserRouter>
+      </BrowserRouter> */}
     </div>
   );
 };
