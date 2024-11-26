@@ -1,5 +1,5 @@
 import { Stack } from "@mui/material";
-import Logo from "../assets/Threads-logo-white-bg.png";
+import Logo from "../../assets/Threads-logo-white-bg.png";
 import Navbar from "./Navbar";
 import { IoMenu } from "react-icons/io5";
 const Header = () => {
