@@ -1,11 +1,21 @@
-import {FC} from 'react'
+import { Stack } from "@mui/material";
+import { FC } from "react";
+import Post from "../../../components/home/Post";
 
-const Repost:FC = () => {
+const Repost: FC = () => {
   return (
-    <div>
-      Repost
-    </div>
-  )
-}
+    <>
+      <Stack
+        flexDirection={"column"}
+        gap={2}
+        mb={10}
+        width={"800px"}
+        mx={"auto"}
+      >
+        <Post />
+      </Stack>
+    </>
+  );
+};
 
-export default Repost
+export default Repost;
