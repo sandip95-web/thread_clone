@@ -1,4 +1,4 @@
-import { Stack } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 import { FC } from "react";
 import Input from "../../components/home/Input";
 import Post from "../../components/home/Post";
@@ -6,13 +6,22 @@ import Post from "../../components/home/Post";
 const Home: FC = () => {
   return (
     <>
-      <Input/>
+      <Input />
       <Stack flexDirection={"column"} gap={2} mb={10}>
-        <Post/>
-        <Post/>
-        <Post/>
-        <Post/>
+        <Post />
+        <Post />
+        <Post />
+        <Post />
       </Stack>
+      <Button
+        size="large"
+        sx={{
+          my: 5,
+          p: 3,
+          textDecoration: "underline",
+          cursor: "pointer",
+        }}
+      >Load more</Button>
     </>
   );
 };

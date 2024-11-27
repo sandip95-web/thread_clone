@@ -1,8 +1,10 @@
-import { Avatar, Stack, Typography } from "@mui/material";
+import { Avatar, Stack, Typography, useMediaQuery } from "@mui/material";
 import { FC } from "react";
 import { IoIosMore } from "react-icons/io";
 
 const Comment: FC = () => {
+  const _700 = useMediaQuery("(min-width:700px)");
+  
   return (
     <>
       <Stack
@@ -14,7 +16,7 @@ const Comment: FC = () => {
         mx={"auto"}
         width={"90%"}
       >
-        <Stack flexDirection={"row"} gap={2}>
+        <Stack flexDirection={"row"} gap={_700 ? 2 : 1}>
           <Avatar src="" alt="" />
           <Stack flexDirection={"column"}>
             <Typography variant="h6" fontWeight={"bold"} fontSize={"0.9rem"}>
@@ -33,7 +35,7 @@ const Comment: FC = () => {
           fontSize={"0.9rem"}
         >
           <p>24min</p>
-          <IoIosMore size={28} />
+          <IoIosMore size={_700 ? 28 : 20} />
         </Stack>
       </Stack>
     </>
