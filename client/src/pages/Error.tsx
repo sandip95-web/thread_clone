@@ -1,8 +1,10 @@
 import { Button, Stack, Typography } from "@mui/material";
 import { FC } from "react";
 import ErrorImage from "../assets/error-bg.png";
+import { useNavigate } from "react-router-dom";
 
 const Error: FC = () => {
+  const navigate = useNavigate();
   return (
     <>
       <Stack
@@ -36,12 +38,12 @@ const Error: FC = () => {
               color: "whitesmoke",
               borderRadius: "10px",
               p: 2,
-              ":hover":{
-                bgcolor:'#F6FB7A',
-                color:"black"
-              }
+              ":hover": {
+                bgcolor: "#F6FB7A",
+                color: "black",
+              },
             }}
-            
+            onClick={() => navigate(-1)}
           >
             Go Back
           </Button>

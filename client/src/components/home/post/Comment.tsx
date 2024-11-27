@@ -1,10 +1,11 @@
-import { Avatar, Stack, Typography, useMediaQuery } from "@mui/material";
+import { Avatar, Menu, MenuItem, Stack, Typography, useMediaQuery } from "@mui/material";
 import { FC } from "react";
 import { IoIosMore } from "react-icons/io";
 
 const Comment: FC = () => {
   const _700 = useMediaQuery("(min-width:700px)");
-  
+  const handleClose=()=>{}
+  const handleDeleteComment=()=>{}
   return (
     <>
       <Stack
@@ -38,6 +39,14 @@ const Comment: FC = () => {
           <IoIosMore size={_700 ? 28 : 20} />
         </Stack>
       </Stack>
+      <Menu
+        open={true}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <MenuItem onClick={handleDeleteComment}>Delete</MenuItem>
+      </Menu>
     </>
   );
 };

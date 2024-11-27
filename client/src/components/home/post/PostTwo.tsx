@@ -71,7 +71,7 @@ const PostTwo: FC = () => {
             >
               4 likes .
             </Typography>
-            <Link to="/post/2">
+            <Link to="/post/2" className="link">
               <Typography
                 variant="caption"
                 color="GrayText"
