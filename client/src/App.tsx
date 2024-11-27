@@ -12,6 +12,8 @@ const ProfileLayout = lazy(
 const Threads = lazy(() => import("./pages/Protected/profile/Threads"));
 const Replies = lazy(() => import("./pages/Protected/profile/Replies"));
 const Repost = lazy(() => import("./pages/Protected/profile/Repost"));
+const SinglePost = lazy(() => import("./pages/Protected/SinglePost"));
+const Register = lazy(() => import("./pages/Register"));
 const App: FC = () => {
   return (
     <>
@@ -20,7 +22,7 @@ const App: FC = () => {
           <Routes>
             <Route path="/" element={<ProtectedLayout />}>
               <Route path="" element={<Home />} />
-              <Route path="post/:id" element={<h1>Single Post</h1>} />
+              <Route path="post/:id" element={<SinglePost />} />
               <Route path="search" element={<Search />} />
               <Route path="profile/" element={<ProfileLayout />}>
                 <Route path="threads/:id" element={<Threads />} />
@@ -28,6 +30,7 @@ const App: FC = () => {
                 <Route path="reposts/:id" element={<Repost />} />
               </Route>
             </Route>
+            <Route path="/register" element={<Register/>}/>
           </Routes>
         </BrowserRouter>
       </Box>
