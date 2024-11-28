@@ -11,19 +11,19 @@ import {
 } from "@mui/material";
 import { useRef, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 
 const EditProfile = () => {
   const _700 = useMediaQuery("(min-width:700px)");
 
   const [pic, setPic] = useState<File | null>(null);
-  const [bio, setBio] = useState('');
+  const [bio, setBio] = useState("");
 
-  const params = useParams();
+  // const params = useParams();
   const imgRef = useRef<HTMLInputElement | null>(null);
 
   const handlePhoto = () => {
-    imgRef.current.click();
+    imgRef.current?.click();
   };
   const handleClose = () => {};
   return (
@@ -88,21 +88,16 @@ const EditProfile = () => {
             <input type="text" value={"sandip"} readOnly className="text1" />
           </Stack>
           <Stack flexDirection={"column"} gap={1}>
-                <Typography
-                  variant="subtitle1"
-                  fontWeight={"bold"}
-                  fontSize={"1.2rem"}
-                  my={2}
-                >
-                  email
-                </Typography>
-                <input
-                  type="text"
-                  value={"sandip"}
-                  readOnly
-                  className="text1"
-                />
-              </Stack>
+            <Typography
+              variant="subtitle1"
+              fontWeight={"bold"}
+              fontSize={"1.2rem"}
+              my={2}
+            >
+              email
+            </Typography>
+            <input type="text" value={"sandip"} readOnly className="text1" />
+          </Stack>
           <Stack flexDirection={"column"} gap={1}>
             <Typography
               variant="subtitle1"
