@@ -8,6 +8,8 @@ const Post: FC = () => {
   const _700 = useMediaQuery("(min-width:700px)");
   const _400 = useMediaQuery("(min-width:400px)");
   const _300 = useMediaQuery("(min-width:300px)");
+
+ 
   return (
     <>
       <Stack

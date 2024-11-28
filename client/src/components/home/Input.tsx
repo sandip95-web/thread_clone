@@ -6,9 +6,16 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { FC } from "react";
+import { useDispatch } from "react-redux";
+import { addPostModal } from "../../redux/slice";
 
 const Input: FC = () => {
   const _700 = useMediaQuery("(min-width:700px)");
+  const dispatch=useDispatch();
+
+  const handleModal=()=>{
+    dispatch(addPostModal(true))
+  }
 
   return (
     <>
@@ -23,6 +30,7 @@ const Input: FC = () => {
           borderBottom={"2px solid gray"}
           my={5}
           mx={"auto"}
+          onClick={handleModal}
         >
           <Stack flexDirection={"row"} alignItems={"center"} gap={2}>
             <Avatar src="" alt="sand" />
