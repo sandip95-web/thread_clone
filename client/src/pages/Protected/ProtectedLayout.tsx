@@ -19,7 +19,7 @@ const ProtectedLayout: FC = () => {
     >
       <Header />
       <AddPost/>
-      {/* <MainMenu/> */}
+      <MainMenu/>
       <EditProfile/>
       <Outlet />
     </Stack>

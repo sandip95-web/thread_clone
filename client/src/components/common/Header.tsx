@@ -2,10 +2,20 @@ import { Stack, useMediaQuery } from "@mui/material";
 import Logo from "../../assets/Threads-logo-white-bg.png";
 import Navbar from "./Navbar";
 import { IoMenu } from "react-icons/io5";
-import Grid from '@mui/material/Grid2'
-import ThreadLogo from '../../assets/Threads-logo-white-bg.png'
+import Grid from "@mui/material/Grid2";
+import ThreadLogo from "../../assets/Threads-logo-white-bg.png";
+import { useDispatch } from "react-redux";
+
+import { toggleMainMenu } from "../../redux/slice";
 const Header = () => {
   const _700 = useMediaQuery("(min-width:700px)");
+  const dispatch = useDispatch();
+
+  const handleOpenMainMenu = (e: React.MouseEvent<SVGElement>) => {
+  
+    dispatch(toggleMainMenu(e.currentTarget));
+    
+  };
 
   return (
     <>
@@ -30,7 +40,13 @@ const Header = () => {
           >
             <Navbar />
           </Stack>
-          <IoMenu size={35} className="menu-icon" color="gray" />
+          <IoMenu
+            size={35}
+            className="menu-icon"
+            color="gray"
+            cursor={"pointer"}
+            onClick={handleOpenMainMenu}
+          />
         </Stack>
       ) : (
         <>
@@ -44,18 +60,23 @@ const Header = () => {
             bgcolor={"aliceblue"}
             zIndex={2}
           >
-            <Navbar/>
+            <Navbar />
           </Stack>
-          <Grid container
-          height={60}
-          justifyContent={"flex-end"}
-          alignItems={"center"}
+          <Grid
+            container
+            height={60}
+            justifyContent={"flex-end"}
+            alignItems={"center"}
           >
-            <Grid  size={{xs:6}}>
+            <Grid size={{ xs: 6 }}>
               <img src={ThreadLogo} alt="logo" width={60} height={35} />
             </Grid>
-          <IoMenu size={35} className="menu-icon" color="gray" />
-
+            <IoMenu
+              size={35}
+              className="menu-icon"
+              color="gray"
+              onClick={handleOpenMainMenu}
+            />
           </Grid>
         </>
       )}
