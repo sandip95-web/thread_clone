@@ -23,6 +23,7 @@ const PostTwo: FC = () => {
               Sandip Maharjan
             </Typography>
 
+            <Link to="/post/1">
             <Typography
               variant="h5"
               fontSize={
@@ -31,6 +32,7 @@ const PostTwo: FC = () => {
             >
               Hello! how is my project guys
             </Typography>
+            </Link>
           </Stack>
           <img
             src={Cover}

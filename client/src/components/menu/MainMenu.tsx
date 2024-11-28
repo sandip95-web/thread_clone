@@ -1,22 +1,27 @@
-import { Menu, MenuItem } from '@mui/material'
-import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
-import { RootState } from '../../redux/store'
-import { toggleMainMenu } from '../../redux/slice'
+import { Menu, MenuItem } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { RootState } from "../../redux/store";
+import { toggleMainMenu, toggleTheme } from "../../redux/slice";
 
 const MainMenu = () => {
-  const{anchorE1}=useSelector((state:RootState)=>state.service)
-  const dispatch=useDispatch();
-  const handleToggleTheme=()=>{}
-  const handleClose=()=>{
-    dispatch(toggleMainMenu(null))
+  const { anchorE1 } = useSelector((state: RootState) => state.service);
+  const dispatch = useDispatch();
+  const handleClose = () => {
+    dispatch(toggleMainMenu(null));
   };
-  const handleLogout=()=>{};
-  console.log("Here:",anchorE1 == null)
+
+  const handleToggleTheme = () => {
+    handleClose();
+    dispatch(toggleTheme());
+  };
+
+  const handleLogout = () => {};
+  console.log("Here:", anchorE1 == null);
 
   return (
     <>
-     <Menu
+      <Menu
         anchorEl={anchorE1}
         open={anchorE1 !== null ? true : false}
         onClose={handleClose}
@@ -28,9 +33,9 @@ const MainMenu = () => {
           <MenuItem>My Profile</MenuItem>
         </Link>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
-      </Menu> 
+      </Menu>
     </>
-  )
-}
+  );
+};
 
-export default MainMenu
+export default MainMenu;

@@ -1,6 +1,7 @@
 import { Avatar, AvatarGroup, Badge, Stack, Stepper, useMediaQuery } from "@mui/material";
 import { FC } from "react";
 
+
 const PostOne: FC = () => {
   const _700 = useMediaQuery("(min-width:700px)");
 
@@ -11,6 +12,7 @@ const PostOne: FC = () => {
         alignItems={"center"}
         justifyContent={"space-between"}
       >
+        
         <Badge
           overlap="circular"
           anchorOrigin={{ vertical: "bottom", horizontal: "right" }}

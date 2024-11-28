@@ -1,5 +1,5 @@
 import { Stack, TextField } from "@mui/material";
-import { FC } from "react";
+import { FC, useState } from "react";
 import Post from "../../components/home/Post";
 import Comment from "../../components/home/post/Comment";
 
