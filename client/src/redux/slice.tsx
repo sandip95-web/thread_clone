@@ -2,10 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export interface ServiceState {
   openAddPostModal: boolean;
+  openEditProfileModal: boolean;
 }
 
 const initialState: ServiceState = {
   openAddPostModal: false,
+  openEditProfileModal: false,
 };
 
 export const serviceSlice = createSlice({
@@ -15,10 +17,13 @@ export const serviceSlice = createSlice({
     addPostModal: (state,action) => {
      state.openAddPostModal = action.payload
     },
+    editProfileModal: (state,action) => {
+      state.openEditProfileModal = action.payload
+     },
   },
 });
 
 
-export const { addPostModal} = serviceSlice.actions;
+export const { addPostModal,editProfileModal} = serviceSlice.actions;
 
 export default serviceSlice.reducer;
