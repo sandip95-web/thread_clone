@@ -4,8 +4,14 @@ import globalErrorHandler from "./middleware/globalErrorHandler";
 import cookieParser from "cookie-parser";
 import postRouter from "./post/postRoute";
 import commentRouter from "./comment/commentRoute";
-
+import cors from "cors";
 const app = express();
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 app.get("/", (req: Request, res: Response, next: NextFunction) => {

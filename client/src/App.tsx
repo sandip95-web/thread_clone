@@ -21,7 +21,7 @@ const Error = lazy(() => import("./pages/Error"));
 const App: FC = () => {
   const { darkMode } = useSelector((state: RootState) => state.service);
 
-  const data = true;
+  const data = false;
   return (
     <>
       <Box minHeight={"100vh"} className={darkMode ? "mode" : ""}>
