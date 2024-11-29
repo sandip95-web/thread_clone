@@ -27,6 +27,7 @@ const Navbar = () => {
         maxWidth={"100%"}
         justifyContent={"space-around"}
         alignItems={"center"}
+      
       >
         <FiArrowLeft
           size={_300 ? 32 : 24}

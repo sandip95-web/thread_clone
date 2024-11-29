@@ -1,8 +1,12 @@
 import { InputAdornment, TextField } from "@mui/material";
 import { FC } from "react";
 import { FaSearch } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const SearchInput: FC = () => {
+  const { darkMode } = useSelector((state: RootState) => state.service);
+
   return (
     <>
       <TextField
@@ -16,7 +20,7 @@ const SearchInput: FC = () => {
           my: 5,
           mx: "auto",
           "& .MuiOutlinedInput-root": {
-            color: "black",
+            color: darkMode ? "whitesmoke" : "black",
 
             "& fieldset": {
               border: "none",
@@ -27,7 +31,10 @@ const SearchInput: FC = () => {
         slotProps={{
           input: {
             startAdornment: (
-              <InputAdornment position="start" sx={{color:"black"}}>
+              <InputAdornment
+                position="start"
+                sx={{ color: darkMode ? "whitesmoke" : "black" }}
+              >
                 <FaSearch />
               </InputAdornment>
             ),

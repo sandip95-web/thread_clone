@@ -53,7 +53,7 @@ const Comment: FC = () => {
           fontSize={"0.9rem"}
         >
           <p>24min</p>
-          <IoIosMore size={_700 ? 28 : 20} onClick={handleOpenMenu} />
+          <IoIosMore size={_700 ? 28 : 20} className="image-icon" onClick={handleOpenMenu} />
         </Stack>
       </Stack>
       <Menu

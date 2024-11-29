@@ -4,7 +4,10 @@ import Cover from "../../../assets/cover.jpg";
 import { FaRegComment, FaRegHeart, FaRetweet } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 const PostTwo: FC = () => {
+  const { darkMode } = useSelector((state: RootState) => state.service);
   const _300 = useMediaQuery("(min-width:300px)");
   const _400 = useMediaQuery("(min-width:400px)");
   const _500 = useMediaQuery("(min-width:500px)");
@@ -24,14 +27,15 @@ const PostTwo: FC = () => {
             </Typography>
 
             <Link to="/post/1">
-            <Typography
-              variant="h5"
-              fontSize={
-                _700 ? "1.2rem" : _400 ? "1rem" : _300 ? "0.9rem" : "0.8rem"
-              }
-            >
-              Hello! how is my project guys
-            </Typography>
+              <Typography
+                variant="h5"
+                fontSize={
+                  _700 ? "1.2rem" : _400 ? "1rem" : _300 ? "0.9rem" : "0.8rem"
+                }
+                className={darkMode ? "mode" : ""}
+              >
+                Hello! how is my project guys
+              </Typography>
             </Link>
           </Stack>
           <img
@@ -68,7 +72,7 @@ const PostTwo: FC = () => {
           >
             <Typography
               variant="caption"
-              color="GrayText"
+              color={darkMode ? "white" : "GrayText"}
               fontSize={_700 ? "1.1rem" : "1rem"}
             >
               4 likes .
@@ -76,7 +80,7 @@ const PostTwo: FC = () => {
             <Link to="/post/2" className="link">
               <Typography
                 variant="caption"
-                color="GrayText"
+                color={darkMode ? "white" : "GrayText"}
                 fontSize={_700 ? "1.1rem" : "1rem"}
               >
                 5 comments .

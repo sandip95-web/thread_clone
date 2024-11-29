@@ -5,8 +5,12 @@ import {
   Button,
   useMediaQuery,
 } from "@mui/material";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const ProfileBar = () => {
+  const { darkMode } = useSelector((state: RootState) => state.service);
+
   const _700 = useMediaQuery("(min-width:700px)");
 
   return (
@@ -36,7 +40,11 @@ const ProfileBar = () => {
             >
               sand_123
             </Typography>
-            <Typography variant="caption" fontSize={_700 ? "1rem" : "0.75rem"} color="gray">
+            <Typography
+              variant="caption"
+              fontSize={_700 ? "1rem" : "0.75rem"}
+              color="gray"
+            >
               This is bio.
             </Typography>
             <Typography variant="caption" fontSize={_700 ? "1rem" : "0.9rem"}>
@@ -48,7 +56,7 @@ const ProfileBar = () => {
           size="medium"
           sx={{
             border: "1px solid gray",
-            color: "black",
+            color: darkMode ? "whitesmoke" : "black",
             borderRadius: "10px",
             p: 2,
             height: 40,

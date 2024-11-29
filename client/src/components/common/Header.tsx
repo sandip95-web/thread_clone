@@ -12,7 +12,7 @@ import { RootState } from "../../redux/store";
 const Header = () => {
   const _700 = useMediaQuery("(min-width:700px)");
   const dispatch = useDispatch();
-  const { darkMode } = useSelector((state:RootState) => state.service);
+  const { darkMode } = useSelector((state: RootState) => state.service);
   const handleOpenMainMenu = (e: React.MouseEvent<SVGElement>) => {
     dispatch(toggleMainMenu(e.currentTarget));
   };
@@ -37,7 +37,7 @@ const Header = () => {
           <Stack
             justifyContent={"center"}
             width={"550px"}
-            bgcolor={"aliceblue"}
+            bgcolor={darkMode ? "" : "aliceblue"}
             zIndex={2}
             height={96}
           >
