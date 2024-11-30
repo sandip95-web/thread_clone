@@ -2,10 +2,13 @@ import { Menu, MenuItem } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { RootState } from "../../redux/store";
-import { toggleMainMenu, toggleTheme } from "../../redux/slice";
+import { addMyInfo, toggleMainMenu, toggleTheme } from "../../redux/slice";
+import { useLogoutMutation } from "../../redux/service";
+import { useEffect } from "react";
 
 const MainMenu = () => {
   const { anchorE1 } = useSelector((state: RootState) => state.service);
+  const [logoutUser, logOutUserData] = useLogoutMutation();
   const dispatch = useDispatch();
   const handleClose = () => {
     dispatch(toggleMainMenu(null));
@@ -16,7 +19,17 @@ const MainMenu = () => {
     dispatch(toggleTheme());
   };
 
-  const handleLogout = () => {};
+  const handleLogout = async () => {
+    handleClose();
+    dispatch(addMyInfo(null));
+    await logoutUser();
+    window.location.reload();
+  };
+  useEffect(() => {
+    if (logOutUserData.isSuccess) {
+      console.log(logOutUserData.data);
+    }
+  }, [logOutUserData.isSuccess]);
 
   return (
     <>

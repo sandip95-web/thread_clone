@@ -38,8 +38,8 @@ export const serviceSlice = createSlice({
     toggleTheme: (state) => {
       state.darkMode = !state.darkMode;
     },
-    addMyInfo:(state,action:PayloadAction<myInfoResponse>)=>{
-      state.myInfo=action.payload.data
+    addMyInfo:(state,action:PayloadAction<myInfoResponse | null>)=>{
+      state.myInfo=action.payload?.data || null 
     }
   },
 });

@@ -26,5 +26,5 @@ export interface myInfo {
   reposts: string[];
 }
 export interface myInfoResponse {
-  data: myInfo | null;
+  data: myInfo;
 }

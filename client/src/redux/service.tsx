@@ -46,7 +46,16 @@ export const serviceApi = createApi({
         }
       },
     }),
+    logout: builder.mutation<{ message: string }, void>({
+      query: (data) => ({
+        url: "/users/logout",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Me"],
+    }),
   }),
 });
 
-export const { useSigninMutation, useLoginMutation,useMyInfoQuery } = serviceApi;
+export const { useSigninMutation, useLoginMutation, useMyInfoQuery,useLogoutMutation } =
+  serviceApi;
