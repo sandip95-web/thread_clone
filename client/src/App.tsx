@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ProtectedLayout from "./pages/Protected/ProtectedLayout";
 import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
+import { useMyInfoQuery } from "./redux/service";
 
 
 // const Register = lazy(() => import("./pages/Register"));
@@ -21,7 +22,8 @@ const Error = lazy(() => import("./pages/Error"));
 const App: FC = () => {
   const { darkMode } = useSelector((state: RootState) => state.service);
 
-  const data = false;
+  const data = useMyInfoQuery();
+  console.log(data);
   return (
     <>
       <Box minHeight={"100vh"} className={darkMode ? "mode" : ""}>

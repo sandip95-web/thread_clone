@@ -1,11 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {WritableDraft} from 'immer';
+import { myInfo, myInfoResponse } from "./types";
 export interface ServiceState {
   openAddPostModal: boolean;
   openEditProfileModal: boolean;
   anchorE1: SVGElement | null;
   anchorE2: SVGElement | null;
   darkMode: boolean;
+  myInfo:myInfo | null
 }
 
 const initialState: ServiceState = {
@@ -14,6 +16,7 @@ const initialState: ServiceState = {
   anchorE1: null,
   anchorE2: null,
   darkMode: false,
+  myInfo:null
 };
 
 export const serviceSlice = createSlice({
@@ -35,10 +38,13 @@ export const serviceSlice = createSlice({
     toggleTheme: (state) => {
       state.darkMode = !state.darkMode;
     },
+    addMyInfo:(state,action:PayloadAction<myInfoResponse>)=>{
+      state.myInfo=action.payload.data
+    }
   },
 });
 
-export const { addPostModal, editProfileModal, toggleMainMenu, toggleMyMenu,toggleTheme } =
+export const { addPostModal, editProfileModal, toggleMainMenu, toggleMyMenu,toggleTheme,addMyInfo } =
   serviceSlice.actions;
 
 export default serviceSlice.reducer;

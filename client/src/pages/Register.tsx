@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import RegisterImage from "../assets/register-bg.webp";
 import { useEffect, useState } from "react";
-import { useSigninMutation } from "../redux/service";
+import { useLoginMutation, useSigninMutation } from "../redux/service";
 
 const Register = () => {
   const _700 = useMediaQuery("(min-width:700px)");
@@ -16,12 +16,14 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [signInUser, signInUserData] = useSigninMutation();
-  const handleLogin = () => {
+  const [loginUser, loginUserData] = useLoginMutation();
+  const handleLogin = async() => {
     const data = {
       email,
       password,
+     
     };
-    console.log(data);
+    await loginUser(data)
   };
   const handleRegister = async () => {
     const data = {
@@ -33,10 +35,12 @@ const Register = () => {
   };
   useEffect(() => {
     if (signInUserData.isSuccess) {
-      console.log("object");
       console.log(signInUserData.data);
     }
-  }, [signInUserData.isSuccess]);
+    if (loginUserData.isSuccess) {
+      console.log(loginUserData.data);
+    }
+  }, [signInUserData.isSuccess,loginUserData.isSuccess]);
   const toggleLogin = () => {
     setLogin((prev) => !prev);
   };
@@ -86,6 +90,7 @@ const Register = () => {
           />
           <TextField
             variant="outlined"
+            type="password"
             placeholder="Enter your Password..."
             onChange={(e) => setPassword(e.target.value)}
           />

@@ -17,7 +17,6 @@ const MainMenu = () => {
   };
 
   const handleLogout = () => {};
-  console.log("Here:", anchorE1 == null);
 
   return (
     <>
