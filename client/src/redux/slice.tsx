@@ -1,6 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { WritableDraft } from "immer";
-import { getResponse, myInfo, Post, PostResponse } from "./types";
+import {
+  getResponse,
+  myInfo,
+  newPostResponse,
+  Post,
+  PostResponse,
+} from "./types";
 export interface ServiceState {
   openAddPostModal: boolean;
   openEditProfileModal: boolean;
@@ -10,6 +16,7 @@ export interface ServiceState {
   myInfo: myInfo | null;
   user: myInfo | null;
   posts: Post[] | null;
+  postId: string | null;
 }
 
 const initialState: ServiceState = {
@@ -21,6 +28,7 @@ const initialState: ServiceState = {
   myInfo: null,
   user: null,
   posts: null,
+  postId: null,
 };
 
 export const serviceSlice = createSlice({
@@ -48,24 +56,46 @@ export const serviceSlice = createSlice({
     getUserDetail: (state, action: PayloadAction<getResponse | null>) => {
       state.user = action.payload?.data || null;
     },
+    addSingle: (state, action: PayloadAction<newPostResponse | null>) => {
+      const posts = state.posts || [];
+      const newPost = action.payload?.newPost;
+
+      if (newPost) {
+        // Use a Map for efficient uniqueness checking
+        const postMap = new Map(posts.map((post) => [post._id, post]));
+
+        // Add the new post, overwriting if it already exists
+        postMap.set(newPost._id, newPost);
+
+        // Convert the Map back to an array
+        state.posts = Array.from(postMap.values());
+      }
+    },
+
     addToAllPosts: (state, action: PayloadAction<PostResponse | null>) => {
-      const newPosts = [...(action.payload?.posts || [])];
+      const newPosts = action.payload?.posts || [];
+
       if (newPosts.length === 0) {
-        state.posts = action.payload?.posts || null;
+        state.posts = [];
         return;
       }
-      const existingPost = [...(state.posts || [])];
+
+      const existingPosts = new Map(
+        state.posts?.map((post) => [post._id, post])
+      );
+
+      // Add or update posts
       newPosts.forEach((post) => {
-        const exisitingIndex = existingPost.findIndex(
-          (item) => item._id === post._id
-        );
-        if (exisitingIndex !== -1) {
-          existingPost[exisitingIndex] = post;
-        } else {
-          existingPost.push(post);
-        }
+        existingPosts.set(post._id, post); // Adds new post or updates the existing one
       });
-      state.posts = existingPost;
+
+      // Convert the Map back to an array and update state
+      state.posts = Array.from(existingPosts.values());
+    },
+
+    deletePost: (state) => {
+      state.posts =
+        state.posts?.filter((post) => post._id !== state.postId) || [];
     },
   },
 });
@@ -79,6 +109,8 @@ export const {
   addMyInfo,
   getUserDetail,
   addToAllPosts,
+  addSingle,
+  deletePost
 } = serviceSlice.actions;
 
 export default serviceSlice.reducer;

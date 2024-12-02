@@ -7,7 +7,7 @@ import {
   searchResponse,
   signInRequest,
 } from "./types";
-import { addMyInfo, addToAllPosts, getUserDetail } from "./slice";
+import { addMyInfo, addSingle, addToAllPosts, deletePost, getUserDetail } from "./slice";
 export const serviceApi = createApi({
   reducerPath: "serviceApi",
   baseQuery: fetchBaseQuery({
@@ -110,7 +110,7 @@ export const serviceApi = createApi({
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          dispatch();
+          dispatch(addSingle(data));
         } catch (error) {
           console.log(error);
         }
@@ -124,6 +124,21 @@ export const serviceApi = createApi({
       invalidatesTags: (_: unknown, __: unknown, { id }) => [
         { type: "User", id },
       ],
+    }),
+    deletePost: builder.mutation<void, { id: string }>({
+      query: (id) => ({
+        url: `/posts/delete/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (_, __, { id }) => [{ type: "Post", id }],
+      async onQueryStarted(_,{dispatch,queryFulfilled}){
+        try {
+          const data= await queryFulfilled;
+          dispatch(deletePost())
+        } catch (error) {
+          console.log(error)
+        }
+      }
     }),
   }),
 });
