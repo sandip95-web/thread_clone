@@ -9,14 +9,18 @@ import {
 import { FC } from "react";
 import { FaInstagram } from "react-icons/fa";
 import { useDispatch } from "react-redux";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useParams } from "react-router-dom";
 import { editProfileModal } from "../../../redux/slice";
+import { useUserDetailsQuery } from "../../../redux/service";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 const ProfileLayout: FC = () => {
   const _700 = useMediaQuery("(min-width:700px)");
   const _500 = useMediaQuery("(min-width:500px)");
   const _300 = useMediaQuery("(min-width:300px)");
 
+  const {id}=useParams();
+  const data=useUserDetailsQuery(id ?? skipToken);
   const dispatch = useDispatch();
   const handleOpenEditProfile = () => {
     dispatch(editProfileModal(true));

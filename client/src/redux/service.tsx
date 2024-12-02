@@ -1,12 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
+  getResponse,
   loginRequest,
-  myInfoResponse,
+  PostResponse,
+  searchResponse,
   signInRequest,
-  signInResponse,
 } from "./types";
-import { addMyInfo } from "./slice";
-
+import { addMyInfo, getAllPosts, getUserDetail } from "./slice";
 export const serviceApi = createApi({
   reducerPath: "serviceApi",
   baseQuery: fetchBaseQuery({
@@ -16,7 +16,7 @@ export const serviceApi = createApi({
   keepUnusedDataFor: 60 * 60 * 24 * 7,
   tagTypes: ["Post", "User", "Me"],
   endpoints: (builder) => ({
-    signin: builder.mutation<signInResponse, signInRequest>({
+    signin: builder.mutation<getResponse, signInRequest>({
       query: (data) => ({
         url: "users/signin",
         method: "POST",
@@ -24,7 +24,7 @@ export const serviceApi = createApi({
       }),
       invalidatesTags: ["Me"],
     }),
-    login: builder.mutation<signInResponse, loginRequest>({
+    login: builder.mutation<getResponse, loginRequest>({
       query: (data) => ({
         url: "/users/login",
         method: "POST",
@@ -32,7 +32,7 @@ export const serviceApi = createApi({
       }),
       invalidatesTags: ["Me"],
     }),
-    myInfo: builder.query<myInfoResponse, void>({
+    myInfo: builder.query<getResponse, void>({
       query: () => ({
         url: "/users/me",
       }),
@@ -40,6 +40,7 @@ export const serviceApi = createApi({
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
+
           dispatch(addMyInfo(data));
         } catch (error) {
           console.log(error);
@@ -54,8 +55,59 @@ export const serviceApi = createApi({
       }),
       invalidatesTags: ["Me"],
     }),
+    userDetails: builder.query<getResponse, string>({
+      query: (id) => ({
+        url: `/users/detail/${id}`,
+      }),
+      providesTags: (_, __, id) => [{ type: "User", id }],
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(getUserDetail(data));
+        } catch (error) {
+          console.log(error);
+        }
+      },
+    }),
+    allPost: builder.query<PostResponse, string>({
+      query: (page) => ({
+        url: `/posts?page=${page}`,
+      }),
+      providesTags: (result) => {
+        return result
+          ? [
+              ...result.posts.map((post) => ({
+                type: "Post" as const,
+                id: post._id,
+              })),
+              { type: "Post" as const, id: "LIST" },
+            ]
+          : [{ type: "Post" as const, id: "LIST" }];
+      },
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          console.log(data);
+          dispatch(getAllPosts(data));
+        } catch (error) {
+          console.log(error);
+        }
+      },
+    }),
+    searchUser: builder.query<searchResponse, string>({
+      query: (query) => ({
+        url: `/users/search/${query}`,
+      }),
+    }),
   }),
 });
 
-export const { useSigninMutation, useLoginMutation, useMyInfoQuery,useLogoutMutation } =
-  serviceApi;
+export const {
+  useSigninMutation,
+  useLoginMutation,
+  useMyInfoQuery,
+  useLogoutMutation,
+  useUserDetailsQuery,
+  useAllPostQuery,
+  useSearchUserQuery
+} = serviceApi;

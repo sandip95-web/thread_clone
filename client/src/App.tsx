@@ -4,9 +4,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ProtectedLayout from "./pages/Protected/ProtectedLayout";
 import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
-import { useMyInfoQuery } from "./redux/service";
 import Loading from "./components/common/Loading";
-
+import { useMyInfoQuery } from "./redux/service";
 
 // const Register = lazy(() => import("./pages/Register"));
 const Search = lazy(() => import("./pages/Protected/Search"));
@@ -21,33 +20,30 @@ const SinglePost = lazy(() => import("./pages/Protected/SinglePost"));
 const Register = lazy(() => import("./pages/Register"));
 const Error = lazy(() => import("./pages/Error"));
 const App: FC = () => {
-  const { darkMode } = useSelector((state: RootState) => state.service);
-
+  const { darkMode, myInfo } = useSelector((state: RootState) => state.service);
   const data = useMyInfoQuery();
-  
   return (
     <>
       <Box minHeight={"100vh"} className={darkMode ? "mode" : ""}>
         <BrowserRouter>
-          <Suspense fallback={<Loading/>}>
-          <Routes>
-            {data.data ? (
-              <Route path="/" element={<ProtectedLayout />}>
-                <Route path="" element={<Home />} />
-                <Route path="post/:id" element={<SinglePost />} />
-                <Route path="search" element={<Search />} />
-                <Route path="profile/" element={<ProfileLayout />}>
-                  <Route path="threads/:id" element={<Threads />} />
-                  <Route path="replies/:id" element={<Replies />} />
-                  <Route path="reposts/:id" element={<Repost />} />
+          <Suspense fallback={<Loading />}>
+            <Routes>
+              {myInfo ? (
+                <Route path="/" element={<ProtectedLayout />}>
+                  <Route path="" element={<Home />} />
+                  <Route path="post/:id" element={<SinglePost />} />
+                  <Route path="search" element={<Search />} />
+                  <Route path="profile/" element={<ProfileLayout />}>
+                    <Route path="threads/:id" element={<Threads />} />
+                    <Route path="replies/:id" element={<Replies />} />
+                    <Route path="reposts/:id" element={<Repost />} />
+                  </Route>
                 </Route>
-              </Route>
-            ) : (
-              <Route path="/" element={<Register />} />
-            )}
+              ) : (
+                <Route path="/" element={<Register />} />
+              )}
               <Route path="*" element={<Error />} />
-
-          </Routes>
+            </Routes>
           </Suspense>
         </BrowserRouter>
       </Box>

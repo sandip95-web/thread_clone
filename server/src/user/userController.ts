@@ -108,7 +108,7 @@ export const getUserDetails = tryCatchHandler(
         path: "reposts",
         populate: [{ path: "likes" }, { path: "comments" }, { path: "admin" }],
       });
-    res.status(200).json({ success: true, user });
+    res.status(200).json({ success: true, data:user });
   }
 );
 

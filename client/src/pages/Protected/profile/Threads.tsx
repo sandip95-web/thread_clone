@@ -1,10 +1,12 @@
 import { Stack, useMediaQuery } from "@mui/material";
 import { FC } from "react";
 import Post from "../../../components/home/Post";
+import { useAllPostQuery } from "../../../redux/service";
 
 const Threads: FC = () => {
   const _700 = useMediaQuery("(min-width:700px)");
-
+  const data= useAllPostQuery("1");
+  
   return (
     <>
       <Stack
