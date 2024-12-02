@@ -48,7 +48,7 @@ export const serviceSlice = createSlice({
     getUserDetail: (state, action: PayloadAction<getResponse | null>) => {
       state.user = action.payload?.data || null;
     },
-    getAllPosts: (state, action: PayloadAction<PostResponse | null>) => {
+    addToAllPosts: (state, action: PayloadAction<PostResponse | null>) => {
       const newPosts = [...(action.payload?.posts || [])];
       if (newPosts.length === 0) {
         state.posts = action.payload?.posts || null;
@@ -78,7 +78,7 @@ export const {
   toggleTheme,
   addMyInfo,
   getUserDetail,
-  getAllPosts,
+  addToAllPosts,
 } = serviceSlice.actions;
 
 export default serviceSlice.reducer;

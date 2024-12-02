@@ -44,3 +44,7 @@ posts:Post[]
 export interface searchResponse{
   users:myInfo[];
 }
+export interface newPostResponse{
+  message:string;
+  newPost:Post
+}

@@ -2,11 +2,12 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
   getResponse,
   loginRequest,
+  newPostResponse,
   PostResponse,
   searchResponse,
   signInRequest,
 } from "./types";
-import { addMyInfo, getAllPosts, getUserDetail } from "./slice";
+import { addMyInfo, addToAllPosts, getUserDetail } from "./slice";
 export const serviceApi = createApi({
   reducerPath: "serviceApi",
   baseQuery: fetchBaseQuery({
@@ -88,7 +89,7 @@ export const serviceApi = createApi({
         try {
           const { data } = await queryFulfilled;
           console.log(data);
-          dispatch(getAllPosts(data));
+          dispatch(addToAllPosts(data));
         } catch (error) {
           console.log(error);
         }
@@ -99,7 +100,23 @@ export const serviceApi = createApi({
         url: `/users/search/${query}`,
       }),
     }),
-    followUser: builder.mutation<{ message: string }, {id:string}>({
+    addPost: builder.mutation<newPostResponse, void>({
+      query: (data) => ({
+        url: "/post/add",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Post"],
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch();
+        } catch (error) {
+          console.log(error);
+        }
+      },
+    }),
+    followUser: builder.mutation<{ message: string }, { id: string }>({
       query: (id) => ({
         url: `/users/follow/${id}`,
         method: "PUT",
@@ -119,4 +136,5 @@ export const {
   useUserDetailsQuery,
   useAllPostQuery,
   useSearchUserQuery,
+  useFollowUserMutation,
 } = serviceApi;
