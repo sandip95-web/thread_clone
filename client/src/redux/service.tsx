@@ -99,6 +99,15 @@ export const serviceApi = createApi({
         url: `/users/search/${query}`,
       }),
     }),
+    followUser: builder.mutation<{ message: string }, {id:string}>({
+      query: (id) => ({
+        url: `/users/follow/${id}`,
+        method: "PUT",
+      }),
+      invalidatesTags: (_: unknown, __: unknown, { id }) => [
+        { type: "User", id },
+      ],
+    }),
   }),
 });
 
@@ -109,5 +118,5 @@ export const {
   useLogoutMutation,
   useUserDetailsQuery,
   useAllPostQuery,
-  useSearchUserQuery
+  useSearchUserQuery,
 } = serviceApi;
