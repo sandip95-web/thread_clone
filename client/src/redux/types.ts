@@ -28,8 +28,8 @@ export interface getResponse {
   message?: string;
 }
 
-export interface Post{
-  _id:string,
+export interface Post {
+  _id: string;
   admin: string;
   text: string;
   media: string;
@@ -37,14 +37,32 @@ export interface Post{
   likes: string[];
   comments: string[];
 }
-export interface PostResponse{
-message:string;
-posts:Post[]
+export interface PostResponse {
+  message: string;
+  posts: Post[];
 }
-export interface searchResponse{
-  users:myInfo[];
+export interface searchResponse {
+  users: myInfo[];
 }
-export interface newPostResponse{
-  message:string;
-  newPost:Post
+export interface newPostResponse {
+  message: string;
+  newPost: Post;
+}
+export interface singlePostResponse {
+  message: string;
+  post: Post;
+}
+export interface addCommentRequest {
+  id: string;
+  text: string;
+  admin: string;
+  post: string;
+}
+export interface deleteCommentRequest {
+  postId: string;
+  id: string;
+}
+export interface updateProfileRequest {
+  text: string;
+  media: File;
 }

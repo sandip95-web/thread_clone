@@ -1,13 +1,23 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
+  addCommentRequest,
+  deleteCommentRequest,
   getResponse,
   loginRequest,
   newPostResponse,
   PostResponse,
   searchResponse,
   signInRequest,
+  singlePostResponse,
+  updateProfileRequest,
 } from "./types";
-import { addMyInfo, addSingle, addToAllPosts, deletePost, getUserDetail } from "./slice";
+import {
+  addMyInfo,
+  addSingle,
+  addToAllPosts,
+  deletePost,
+  getUserDetail,
+} from "./slice";
 export const serviceApi = createApi({
   reducerPath: "serviceApi",
   baseQuery: fetchBaseQuery({
@@ -125,20 +135,63 @@ export const serviceApi = createApi({
         { type: "User", id },
       ],
     }),
+
+    updateProfile: builder.mutation<{ message: string }, updateProfileRequest>({
+      query: (data) => ({
+        url: `/users/update`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["Me"],
+    }),
     deletePost: builder.mutation<void, { id: string }>({
       query: (id) => ({
         url: `/posts/delete/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: (_, __, { id }) => [{ type: "Post", id }],
-      async onQueryStarted(_,{dispatch,queryFulfilled}){
+      async onQueryStarted(_, { dispatch }) {
         try {
-          const data= await queryFulfilled;
-          dispatch(deletePost())
+          dispatch(deletePost());
         } catch (error) {
-          console.log(error)
+          console.log(error);
         }
-      }
+      },
+    }),
+    likePost: builder.mutation<{ message: string }, { id: string }>({
+      query: (id) => ({
+        url: `/posts/like/${id}`,
+        method: "PUT",
+      }),
+      invalidatesTags: (_, __, { id }) => [{ type: "Post", id }],
+    }),
+    singlePost: builder.query<singlePostResponse, { id: string }>({
+      query: (id) => ({
+        url: `/posts/${id}`,
+      }),
+      providesTags: (_, __, { id }) => [{ type: "Post", id }],
+    }),
+    repost: builder.mutation<{ message: string }, { id: string }>({
+      query: (id) => ({
+        url: `/posts/repost/${id}`,
+        method: "PUT",
+      }),
+      invalidatesTags: ["User"],
+    }),
+    addComment: builder.mutation<{ message: string }, addCommentRequest>({
+      query: ({ id, ...data }) => ({
+        url: `/comments/add/${id}`,
+        method: "Post",
+        body: data,
+      }),
+      invalidatesTags: ["User"],
+    }),
+    deleteComment: builder.mutation<{ message: string }, deleteCommentRequest>({
+      query: ({ postId, id }) => ({
+        url: `/comments/delete/${postId}/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (_, __, { postId }) => [{ type: "Post", id: postId }],
     }),
   }),
 });
@@ -152,4 +205,8 @@ export const {
   useAllPostQuery,
   useSearchUserQuery,
   useFollowUserMutation,
+  useAddCommentMutation,
+  useDeletePostMutation,
+  useAddPostMutation,
+  useDeleteCommentMutation,
 } = serviceApi;
