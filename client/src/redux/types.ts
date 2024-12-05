@@ -204,9 +204,7 @@ export interface PostResponse {
   message: string;
   posts: Post[];
 }
-export interface searchResponse {
-  users: searchProp[];
-}
+
 export interface newPostResponse {
   message: string;
   newPost: Post;
