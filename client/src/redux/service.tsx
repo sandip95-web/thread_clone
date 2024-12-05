@@ -7,10 +7,8 @@ import {
   newPostResponse,
   PostResponse,
   searchProp,
-
   signInRequest,
   singlePostResponse,
-  updateProfileRequest,
 } from "./types";
 import {
   addMyInfo,

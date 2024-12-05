@@ -21,7 +21,6 @@ import {
 } from "../../redux/service";
 import { Bounce, toast } from "react-toastify";
 import Loading from "../common/Loading";
-import { updateProfileRequest } from "../../redux/types";
 
 const EditProfile = () => {
   const _700 = useMediaQuery("(min-width:700px)");
