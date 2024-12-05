@@ -21,7 +21,7 @@ const Register = lazy(() => import("./pages/Register"));
 const Error = lazy(() => import("./pages/Error"));
 const App: FC = () => {
   const { darkMode, myInfo } = useSelector((state: RootState) => state.service);
-  const data = useMyInfoQuery();
+  useMyInfoQuery();
   return (
     <>
       <Box minHeight={"100vh"} className={darkMode ? "mode" : ""}>

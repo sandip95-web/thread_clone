@@ -45,11 +45,18 @@ const EditProfile = () => {
   };
   const handleUpdate = async () => {
     if (pic || bio) {
-      const data: updateProfileRequest = {
-        text: bio,
-        media: pic instanceof File ? pic : pic || "",
-      };
-      await updateProfile(data);
+      const formData = new FormData();
+
+      // Append the text field
+      if (bio) {
+        formData.append("text", bio);
+      }
+  
+      // Append the media file if it exists and is a File
+      if (pic instanceof File) {
+        formData.append("media", pic);
+      }
+      await updateProfile(formData);
     }
     dispatch(editProfileModal(false));
   };

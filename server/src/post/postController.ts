@@ -12,9 +12,10 @@ import commentModel from "../comment/commentModel";
 export const addNewPost = tryCatchHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const form = formidable({});
+    
     const _req = req as AuthRequest;
     form.parse(req, async (err, fields: Fields, files: Files) => {
-      if (err) {
+      if (err) {  
         return next(createHttpError(400, "Error in form parse"));
       }
       const post = new postModel();

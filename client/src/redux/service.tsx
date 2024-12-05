@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
   addCommentRequest,
-  AddPostRequest,
   deleteCommentRequest,
   getResponse,
   loginRequest,
@@ -112,9 +111,9 @@ export const serviceApi = createApi({
         url: `/users/search/${query}`,
       }),
     }),
-    addPost: builder.mutation<newPostResponse, AddPostRequest>({
+    addPost: builder.mutation<newPostResponse, FormData>({
       query: (data) => ({
-        url: "/post/add",
+        url: "/posts/add",
         method: "POST",
         body: data,
       }),
@@ -138,7 +137,7 @@ export const serviceApi = createApi({
       ],
     }),
 
-    updateProfile: builder.mutation<{ message: string }, updateProfileRequest>({
+    updateProfile: builder.mutation<{ message: string }, FormData>({
       query: (data) => ({
         url: `/users/update`,
         method: "PUT",

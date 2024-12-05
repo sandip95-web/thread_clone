@@ -12,7 +12,6 @@ const Home: FC = () => {
   const [showMore, setShowMore] = useState(true);
   const { data, isLoading } = useAllPostQuery(page);
   const { posts } = useSelector((state: RootState) => state.service);
-  console.log(posts)
   const handleClick = () => {
     setPage((pre) => pre + 1);
   };
