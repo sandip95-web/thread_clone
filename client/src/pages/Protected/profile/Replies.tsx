@@ -1,8 +1,11 @@
-import { Stack, useMediaQuery } from "@mui/material";
-import { FC } from "react";
-import Comment from "../../../components/home/post/Comment";
+import { Stack, Typography, useMediaQuery } from "@mui/material";
 
-const Replies: FC = () => {
+import { useSelector } from "react-redux";
+import Comment from "../../../components/home/post/Comment";
+import { RootState } from "../../../redux/store";
+
+const Replies = () => {
+  const { user } = useSelector((state:RootState) => state.service);
   const _700 = useMediaQuery("(min-width:700px)");
   return (
     <>
@@ -12,7 +15,19 @@ const Replies: FC = () => {
         width={_700 ? "800px" : "90%"}
         mx={"auto"}
       >
-        <Comment />
+        {user ? (
+          user ? (
+            user.replies.length > 0 ? (
+              user.replies.map((e) => {
+                return <Comment key={e._id} comment={e} postId={e.post} />;
+              })
+            ) : (
+              <Typography textAlign={"center"} variant="h6">
+                No Replies yet !
+              </Typography>
+            )
+          ) : null
+        ) : null}
       </Stack>
     </>
   );

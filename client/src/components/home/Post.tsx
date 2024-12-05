@@ -1,22 +1,40 @@
 import { Stack, Typography, useMediaQuery } from "@mui/material";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { IoIosMore } from "react-icons/io";
-import PostOne from "./post/PostOne";
-import PostTwo from "./post/PostTwo";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleMyMenu } from "../../redux/slice";
+import { addPostId, toggleMyMenu } from "../../redux/slice";
 import { RootState } from "../../redux/store";
 
-const Post: FC = () => {
+import PostOne from "./post/PostOne";
+import PostTwo from "./post/PostTwo";
+import { PostProps } from "../../redux/types";
+
+const Post: FC<PostProps> = ({ post }) => {
+  const [isAdmin, setIsAdmin] = useState<boolean>();
   const _700 = useMediaQuery("(min-width:700px)");
   const _400 = useMediaQuery("(min-width:400px)");
   const _300 = useMediaQuery("(min-width:300px)");
   const dispatch = useDispatch();
-  const { darkMode } = useSelector((state: RootState) => state.service);
+  const { darkMode, myInfo } = useSelector((state: RootState) => state.service);
 
   const handleOpenMenu = (e: React.MouseEvent<SVGElement>) => {
+    dispatch(addPostId(post._id));
     dispatch(toggleMyMenu(e.currentTarget));
   };
+
+  const checkIsAdmin = () => {
+    if (post?.admin._id === myInfo?._id) {
+      setIsAdmin(true);
+      return;
+    }
+    setIsAdmin(false);
+  };
+
+  useEffect(() => {
+    if (post && myInfo) {
+      checkIsAdmin();
+    }
+  }, [post, myInfo]);
 
   return (
     <>
@@ -36,8 +54,8 @@ const Post: FC = () => {
         }}
       >
         <Stack flexDirection={"row"} gap={_700 ? 2 : 1}>
-          <PostOne />
-          <PostTwo />
+          <PostOne post={post} />
+          <PostTwo post={post} />
         </Stack>
         <Stack
           flexDirection={"row"}
@@ -54,7 +72,11 @@ const Post: FC = () => {
           >
             24hr
           </Typography>
-          <IoIosMore size={_700 ? 28 : 20} onClick={handleOpenMenu} />
+          {isAdmin ? (
+            <IoIosMore size={_700 ? 28 : 20} onClick={handleOpenMenu} />
+          ) : (
+            <IoIosMore size={_700 ? 28 : 20} />
+          )}
         </Stack>
       </Stack>
     </>

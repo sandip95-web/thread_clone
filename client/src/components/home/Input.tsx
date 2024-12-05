@@ -6,16 +6,18 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { FC } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addPostModal } from "../../redux/slice";
+import { RootState } from "../../redux/store";
 
 const Input: FC = () => {
+  const { myInfo } = useSelector((state: RootState) => state.service);
   const _700 = useMediaQuery("(min-width:700px)");
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
 
-  const handleModal=()=>{
-    dispatch(addPostModal(true))
-  }
+  const handleModal = () => {
+    dispatch(addPostModal(true));
+  };
 
   return (
     <>
@@ -33,7 +35,10 @@ const Input: FC = () => {
           onClick={handleModal}
         >
           <Stack flexDirection={"row"} alignItems={"center"} gap={2}>
-            <Avatar src="" alt="sand" />
+            <Avatar
+              src={myInfo ? myInfo.profilePic : ""}
+              alt={myInfo ? myInfo.username : ""}
+            />
             <Typography color="GrayText">Start a thread...</Typography>
           </Stack>
           <Button

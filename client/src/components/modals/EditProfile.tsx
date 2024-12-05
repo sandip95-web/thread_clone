@@ -9,23 +9,32 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { editProfileModal } from "../../redux/slice";
-
+import { useParams } from "react-router-dom";
+import {
+  useUpdateProfileMutation,
+  useUserDetailsQuery,
+} from "../../redux/service";
+import { Bounce, toast } from "react-toastify";
+import Loading from "../common/Loading";
+import { updateProfileRequest } from "../../redux/types";
 
 const EditProfile = () => {
   const _700 = useMediaQuery("(min-width:700px)");
 
   const [pic, setPic] = useState<File | null>(null);
   const [bio, setBio] = useState("");
-
+  const { id } = useParams();
   const imgRef = useRef<HTMLInputElement | null>(null);
-  const { openEditProfileModal } = useSelector(
+  const { openEditProfileModal, myInfo } = useSelector(
     (state: RootState) => state.service
   );
+  const [updateProfile, updateProfileData] = useUpdateProfileMutation();
+  const { refetch } = useUserDetailsQuery(id!);
   const dispatch = useDispatch();
 
   const handlePhoto = () => {
@@ -34,6 +43,44 @@ const EditProfile = () => {
   const handleClose = () => {
     dispatch(editProfileModal(false));
   };
+  const handleUpdate = async () => {
+    if (pic || bio) {
+      const data: updateProfileRequest = {
+        text: bio,
+        media: pic instanceof File ? pic : pic || "",
+      };
+      await updateProfile(data);
+    }
+    dispatch(editProfileModal(false));
+  };
+
+  useEffect(() => {
+    if (updateProfileData.isSuccess) {
+      refetch();
+      toast.success(updateProfileData.data.message, {
+        position: "top-center",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+        transition: Bounce,
+      });
+    }
+    if (updateProfileData.isError) {
+      toast.error("Error editing profile.", {
+        position: "top-center",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+        transition: Bounce,
+      });
+    }
+  }, [updateProfileData.isError, updateProfileData.isSuccess]);
   return (
     <>
       <Dialog
@@ -42,105 +89,130 @@ const EditProfile = () => {
         fullWidth
         fullScreen={_700 ? false : true}
       >
-        <Box position={"absolute"} top={20} right={20} onClick={handleClose}>
-          <RxCross2 size={28} className="image-icon" />
-        </Box>
-        <DialogTitle textAlign={"center"} mb={5}>
-          Edit Profile
-        </DialogTitle>
-        <DialogContent>
-          <Stack flexDirection={"column"} gap={1}>
-            <Avatar
-              src={pic ? URL.createObjectURL(pic) : ""}
-              alt=""
-              sx={{
-                width: 96,
-                height: 96,
-                alignSelf: "center",
-              }}
-            />
-            <Button
-              size="large"
-              sx={{
-                border: "2px solid gray",
-                borderRadius: "10px",
-                width: 96,
-                height: 40,
-                alignSelf: "center",
-                my: 2,
-                ":hover": { cursor: "pointer" },
-              }}
-              onClick={handlePhoto}
-            >
-              Change
-            </Button>
-            <input
-              type="file"
-              className="file-input"
-              accept="image/*"
-              ref={imgRef}
-              onChange={(e) => {
-                if (e.target.files && e.target.files[0]) {
-                  setPic(e.target.files[0]);
-                }
-              }}
-            />
-            <Typography
-              variant="subtitle1"
-              fontWeight={"bold"}
-              fontSize={"1.2rem"}
-              my={2}
-            >
-              Username
-            </Typography>
-            <input type="text" value={"sandip"} readOnly className="text1" />
+        {updateProfileData.isLoading ? (
+          <Stack height={"60vh"}>
+            <Loading />
           </Stack>
-          <Stack flexDirection={"column"} gap={1}>
-            <Typography
-              variant="subtitle1"
-              fontWeight={"bold"}
-              fontSize={"1.2rem"}
-              my={2}
+        ) : (
+          <>
+            <Box
+              position={"absolute"}
+              top={20}
+              right={20}
+              onClick={handleClose}
             >
-              email
-            </Typography>
-            <input type="text" value={"sandip"} readOnly className="text1" />
-          </Stack>
-          <Stack flexDirection={"column"} gap={1}>
-            <Typography
-              variant="subtitle1"
-              fontWeight={"bold"}
-              fontSize={"1.2rem"}
-              my={2}
-            >
-              Bio
-            </Typography>
-            <input
-              type="text"
-              className="text1"
-              placeholder={"sandip"}
-              value={bio ? bio : ""}
-              onChange={(e) => setBio(e.target.value)}
-            />
-          </Stack>
-          <Button
-            size="large"
-            sx={{
-              border: "2px solid gray",
-              borderRadius: "10px",
-              bgcolor: "GrayText",
-              color: "white",
-              width: "100%",
-              my: 2,
-              fontSize: "1.2rem",
-              ":hover": { cursor: "pointer", bgcolor: "gray" },
-            }}
-            // onClick={handleUpdate}
-          >
-            {" "}
-            Update{" "}
-          </Button>
-        </DialogContent>
+              <RxCross2 size={28} className="image-icon" />
+            </Box>
+            <DialogTitle textAlign={"center"} mb={5}>
+              Edit Profile
+            </DialogTitle>
+            <DialogContent>
+              <Stack flexDirection={"column"} gap={1}>
+                <Avatar
+                  src={
+                    pic
+                      ? URL.createObjectURL(pic)
+                      : myInfo
+                      ? myInfo.profilePic
+                      : ""
+                  }
+                  alt={myInfo ? myInfo.username : ""}
+                  sx={{ width: 96, height: 96, alignSelf: "center" }}
+                />
+                <Button
+                  size="large"
+                  sx={{
+                    border: "2px solid gray",
+                    borderRadius: "10px",
+                    width: 96,
+                    height: 40,
+                    alignSelf: "center",
+                    my: 2,
+                    ":hover": { cursor: "pointer" },
+                  }}
+                  onClick={handlePhoto}
+                >
+                  Change
+                </Button>
+                <input
+                  type="file"
+                  className="file-input"
+                  accept="image/*"
+                  ref={imgRef}
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files[0]) {
+                      setPic(e.target.files[0]);
+                    }
+                  }}
+                />
+                <Typography
+                  variant="subtitle1"
+                  fontWeight={"bold"}
+                  fontSize={"1.2rem"}
+                  my={2}
+                >
+                  Username
+                </Typography>
+                <input
+                  type="text"
+                  value={myInfo ? myInfo.username : ""}
+                  readOnly
+                  className="text1"
+                />
+              </Stack>
+              <Stack flexDirection={"column"} gap={1}>
+                <Typography
+                  variant="subtitle1"
+                  fontWeight={"bold"}
+                  fontSize={"1.2rem"}
+                  my={2}
+                >
+                  email
+                </Typography>
+                <input
+                  type="text"
+                  value={myInfo ? myInfo.email : ""}
+                  readOnly
+                  className="text1"
+                />
+              </Stack>
+              <Stack flexDirection={"column"} gap={1}>
+                <Typography
+                  variant="subtitle1"
+                  fontWeight={"bold"}
+                  fontSize={"1.2rem"}
+                  my={2}
+                >
+                  Bio
+                </Typography>
+                <input
+                  type="text"
+                  className="text1"
+                  placeholder={myInfo ? myInfo.bio : ""}
+                  value={bio ? bio : ""}
+                  onChange={(e) => setBio(e.target.value)}
+                />
+              </Stack>
+              <Button
+                size="large"
+                sx={{
+                  border: "2px solid gray",
+                  borderRadius: "10px",
+                  bgcolor: "GrayText",
+                  color: "white",
+                  width: "100%",
+                  my: 2,
+                  fontSize: "1.2rem",
+                  ":hover": { cursor: "pointer", bgcolor: "gray" },
+                }}
+                onClick={handleUpdate}
+              >
+                {" "}
+                Update{" "}
+              </Button>
+            </DialogContent>
+          </>
+        )}
       </Dialog>
     </>
   );

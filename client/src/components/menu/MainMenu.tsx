@@ -5,9 +5,10 @@ import { RootState } from "../../redux/store";
 import { addMyInfo, toggleMainMenu, toggleTheme } from "../../redux/slice";
 import { useLogoutMutation } from "../../redux/service";
 import { useEffect } from "react";
+import { Bounce, toast } from "react-toastify";
 
 const MainMenu = () => {
-  const { anchorE1 } = useSelector((state: RootState) => state.service);
+  const { anchorE1,myInfo } = useSelector((state: RootState) => state.service);
   const [logoutUser, logOutUserData] = useLogoutMutation();
   const dispatch = useDispatch();
   const handleClose = () => {
@@ -27,10 +28,30 @@ const MainMenu = () => {
   };
   useEffect(() => {
     if (logOutUserData.isSuccess) {
-      console.log(logOutUserData.data);
+      toast.warning(logOutUserData.data.message, {
+        position: "top-center",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+        transition: Bounce,
+      });
     }
-  }, [logOutUserData.isSuccess]);
-
+    if (logOutUserData.isError) {
+      toast.error("Error while logging out.", {
+        position: "top-center",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+        transition: Bounce,
+      });
+    }
+  }, [logOutUserData.isSuccess, logOutUserData.isError]);
   return (
     <>
       <Menu
@@ -41,7 +62,7 @@ const MainMenu = () => {
         transformOrigin={{ vertical: "top", horizontal: "right" }}
       >
         <MenuItem onClick={handleToggleTheme}>Toggle Theme</MenuItem>
-        <Link to={`/profile/threads/1`} className="link">
+        <Link to={`/profile/threads/${myInfo?._id}`} className="link">
           <MenuItem>My Profile</MenuItem>
         </Link>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>

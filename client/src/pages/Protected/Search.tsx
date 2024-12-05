@@ -1,10 +1,13 @@
-import { Stack } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import ProfileBar from "../../components/search/ProfileBar";
 import SearchInput from "../../components/search/SearchInput";
+import { RootState } from "../../redux/store";
+import { useSelector } from "react-redux";
 
 const Search = () => {
+  const { searchedUsers } = useSelector((state:RootState) => state.service);
   return (
-    <>
+    <>  
       <SearchInput />
       <Stack
       flexDirection={"column"}
@@ -13,7 +16,19 @@ const Search = () => {
       width={"60%"}
       mx={"auto"}
       >
-        <ProfileBar />
+        {searchedUsers ? (
+          searchedUsers.length > 0 ? (
+            searchedUsers.map((user) => {
+              return <ProfileBar key={user._id} user={user} />;
+            })
+          ) : (
+            ""
+          )
+        ) : (
+          <Typography variant="h6" textAlign={"center"} mb={5}>
+            Start searching...
+          </Typography>
+        )}
       </Stack>
     </>
   );

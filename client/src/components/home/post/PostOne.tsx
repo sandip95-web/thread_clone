@@ -1,10 +1,18 @@
-import { Avatar, AvatarGroup, Badge, Stack, Stepper, useMediaQuery } from "@mui/material";
+import {
+  Avatar,
+  AvatarGroup,
+  Badge,
+  Stack,
+  Stepper,
+  useMediaQuery,
+} from "@mui/material";
 import { FC } from "react";
+import { PostProp } from "../../../redux/types";
+import { Link } from "react-router-dom";
 
-
-const PostOne: FC = () => {
+const PostOne: FC<PostProp> = ({ post }) => {
   const _700 = useMediaQuery("(min-width:700px)");
-
+  
   return (
     <>
       <Stack
@@ -12,36 +20,37 @@ const PostOne: FC = () => {
         alignItems={"center"}
         justifyContent={"space-between"}
       >
-        
-        <Badge
-          overlap="circular"
-          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-          badgeContent={
+        <Link to={`/profile/threads/${post?.admin?._id}`}>
+          <Badge
+            overlap="circular"
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            badgeContent={
+              <Avatar
+                alt="+"
+                src=""
+                sx={{
+                  width: _700 ? 20 : 14,
+                  height: _700 ? 20 : 14,
+                  bgcolor: "green",
+                  position:  _700 ? "relative" : "initial",
+                  right: _700 ? 4 : 0,
+                  bottom: _700 ? 4 : 0,
+                }}
+              >
+                +
+              </Avatar>
+            }
+          >
             <Avatar
-              alt="+"
-              src=""
+              alt={post ? post.admin.username : ""}
+              src={post ? post.admin.profilePic : ""}
               sx={{
-                width: _700 ? 20 : 14,
-                height:  _700 ? 20 : 14,
-                bgcolor: "green",
-                position: "relative",
-                right: _700 ? 4 : 0,
-                bottom: _700 ? 4 : 0,
+                width: _700 ? 40 : 32,
+                height: _700 ? 40 : 32,
               }}
-            >
-              +
-            </Avatar>
-          }
-        >
-          <Avatar
-            alt="sand"
-            src=""
-            sx={{
-              width:  _700 ? 40 : 32,
-              height:  _700 ? 40 : 32,
-            }}
-          />
-        </Badge>
+            />
+          </Badge>
+        </Link>
         <Stack
           flexDirection={"column"}
           alignItems={"center"}
@@ -57,18 +66,35 @@ const PostOne: FC = () => {
               height: "100%",
             }}
           ></Stepper>
-          <AvatarGroup
-            total={3}
-            sx={{
-              "& .MuiAvatar-root": {
-                width:  _700 ? 24 : 16,
-                height:  _700 ? 24 : 16,
-                fontSize:  _700 ? 12 : 8,
-              },
-            }}
-          >
-            <Avatar src="" alt="" />
-          </AvatarGroup>
+          {post ? (
+            post.comments.length > 0 ? (
+              <AvatarGroup
+                total={post?.comments.length}
+                sx={{
+                  "& .MuiAvatar-root": {
+                    width: _700 ? 24 : 16,
+                    height: _700 ? 24 : 16,
+                    fontSize: _700 ? 12 : 8,
+                  },
+                }}
+              >
+                <Avatar
+                  src={post?.comments[0].admin.profilePic}
+                  alt={post?.comments[0].admin.username}
+                />
+                {post.comments.length > 1 ? (
+                  <Avatar
+                    src={post?.comments[1].admin.profilePic}
+                    alt={post?.comments[1].admin.username}
+                  />
+                ) : null}
+              </AvatarGroup>
+            ) : (
+              ""
+            )
+          ) : (
+            ""
+          )}
         </Stack>
       </Stack>
     </>

@@ -18,6 +18,132 @@ export interface myInfo {
   profilePic: string;
   public_id: string;
   followers: string[];
+  threads: [
+    {
+      _id: string;
+      admin: {
+        _id: string;
+        username: string;
+        email: string;
+        profilePic: string;
+        followers: string[];
+        threads: string[];
+        replies: string[];
+        reposts: string[];
+
+        public_id: string;
+      };
+      text: string;
+      media: string;
+      public_id: string;
+      likes: [
+        {
+          _id: string;
+          username: string;
+          email: string;
+          profilePic: string;
+          followers: string[];
+          threads: string[];
+          replies: string[];
+          reposts: string[];
+        }
+      ];
+      comments: [
+        {
+          _id: string;
+          admin: {
+            _id: string;
+            username: string;
+            email: string;
+            profilePic: string;
+            followers: string[];
+            threads: string[];
+            replies: string[];
+            reposts: string[];
+          };
+          post: string;
+          text: string;
+        }
+      ];
+    }
+  ];
+  replies: [
+    {
+      _id: string;
+      admin: {
+        _id: string;
+        username: string;
+        email: string;
+        profilePic: string;
+        followers: string[];
+        threads: string[];
+        replies: string[];
+        reposts: string[];
+      };
+      post: string;
+      text: string;
+    }
+  ];
+  reposts: [
+    {
+      _id: string;
+      admin: {
+        _id: string;
+        username: string;
+        email: string;
+        profilePic: string;
+        followers: string[];
+        threads: string[];
+        replies: string[];
+        reposts: string[];
+
+        public_id: string;
+      };
+      text: string;
+      media: string;
+      public_id: string;
+      likes: [
+        {
+          _id: string;
+          username: string;
+          email: string;
+          profilePic: string;
+          followers: string[];
+          threads: string[];
+          replies: string[];
+          reposts: string[];
+        }
+      ];
+      comments: [
+        {
+          _id: string;
+          admin: {
+            _id: string;
+            username: string;
+            email: string;
+            profilePic: string;
+            followers: string[];
+            threads: string[];
+            replies: string[];
+            reposts: string[];
+          };
+          post: string;
+          text: string;
+        }
+      ];
+    }
+  ];
+}
+
+export interface searchProp {
+  _id: string;
+  username: string;
+  email: string;
+  password: string;
+  bio: string;
+  profilePic: string;
+  public_id: string;
+  followers: string[];
   threads: string[];
   replies: string[];
   reposts: string[];
@@ -30,19 +156,56 @@ export interface getResponse {
 
 export interface Post {
   _id: string;
-  admin: string;
   text: string;
   media: string;
   public_id: string;
-  likes: string[];
-  comments: string[];
+
+  likes: Array<{
+    _id: string;
+    username: string;
+    email: string;
+    profilePic: string;
+    followers: string[];
+    threads: string[];
+    replies: string[];
+    reposts: string[];
+  }>;
+
+  comments: Array<{
+    _id: string;
+    admin: {
+      _id: string;
+      username: string;
+      email: string;
+      profilePic: string;
+      followers: string[];
+      threads: string[];
+      replies: string[];
+      reposts: string[];
+    };
+    post: string;
+    text: string;
+  }>;
+
+  admin: {
+    _id: string;
+    username: string;
+    email: string;
+    profilePic: string;
+    followers: string[];
+    threads: string[];
+    replies: string[];
+    reposts: string[];
+
+    public_id: string;
+  };
 }
 export interface PostResponse {
   message: string;
   posts: Post[];
 }
 export interface searchResponse {
-  users: myInfo[];
+  users: searchProp[];
 }
 export interface newPostResponse {
   message: string;
@@ -55,17 +218,102 @@ export interface singlePostResponse {
 export interface addCommentRequest {
   id: string;
   text: string;
-  admin: string;
-  post: string;
 }
 export interface deleteCommentRequest {
   postId: string;
   id: string;
 }
 export interface updateProfileRequest {
-  text: string;
-  media: File;
+  text?: string;
+  media?: File | string;
 }
-export interface searchUserResponse{
-  users:myInfo[]
+export interface searchUserResponse {
+  users: searchProp[];
+}
+export interface PostProps {
+  post: {
+    _id: string;
+    text: string;
+    media: string;
+    public_id: string;
+
+    likes: Array<{
+      _id: string;
+      username: string;
+      email: string;
+      profilePic: string;
+      followers: string[];
+      threads: string[];
+      replies: string[];
+      reposts: string[];
+    }>;
+
+    comments: Array<{
+      _id: string;
+      admin: {
+        _id: string;
+        username: string;
+        email: string;
+        profilePic: string;
+        followers: string[];
+        threads: string[];
+        replies: string[];
+        reposts: string[];
+      };
+      post: string;
+      text: string;
+    }>;
+
+    admin: {
+      _id: string;
+      username: string;
+      email: string;
+      profilePic: string;
+      followers: string[];
+      threads: string[];
+      replies: string[];
+      reposts: string[];
+
+      public_id: string;
+    };
+  };
+}
+export interface SearchUserProp {
+  user: {
+    _id: string;
+    username: string;
+    email: string;
+    password: string;
+    bio: string;
+    profilePic: string;
+    public_id: string;
+    followers: string[];
+    threads: string[];
+    replies: string[];
+    reposts: string[];
+  };
+}
+
+export interface CommentProps {
+  comment: {
+    _id: string;
+    admin: {
+      _id: string;
+      username: string;
+      email: string;
+      profilePic: string;
+      followers: string[];
+      threads: string[];
+      replies: string[];
+      reposts: string[];
+    };
+    post: string;
+    text: string;
+  };
+  postId: string;
+}
+
+export interface AddPostRequest {
+  text?: string;
+  media?: string | File;
 }

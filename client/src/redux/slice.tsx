@@ -6,7 +6,7 @@ import {
   newPostResponse,
   Post,
   PostResponse,
-  searchUserResponse,
+  searchProp,
 } from "./types";
 export interface ServiceState {
   openAddPostModal: boolean;
@@ -18,7 +18,7 @@ export interface ServiceState {
   user: myInfo | null;
   posts: Post[] | null;
   postId: string | null;
-  searchedUsers: myInfo[] | null;
+  searchedUsers: searchProp[] | null;
 }
 
 const initialState: ServiceState = {
@@ -103,11 +103,8 @@ export const serviceSlice = createSlice({
     addPostId: (state, action: PayloadAction<string>) => {
       state.postId = action.payload;
     },
-    addToSearchedUsers: (
-      state,
-      action: PayloadAction<searchUserResponse | null>
-    ) => {
-      state.searchedUsers = action.payload?.users as myInfo[];
+    addToSearchedUsers: (state, action: PayloadAction<searchProp[] | null>) => {
+      state.searchedUsers = action.payload;
     },
   },
 });
@@ -124,7 +121,7 @@ export const {
   addSingle,
   deletePost,
   addToSearchedUsers,
-  addPostId
+  addPostId,
 } = serviceSlice.actions;
 
 export default serviceSlice.reducer;

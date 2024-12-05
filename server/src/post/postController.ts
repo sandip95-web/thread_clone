@@ -7,7 +7,7 @@ import cloudinary from "../config/cloudinary";
 import { AuthRequest } from "../middleware/auth";
 import userModel from "../user/userModel";
 import commentModel from "../comment/commentModel";
-import mongoose from "mongoose";
+
 
 export const addNewPost = tryCatchHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -115,6 +115,7 @@ export const deletePost = tryCatchHandler(
 export const likePost = tryCatchHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
+   
     const _req = req as AuthRequest;
     if (!id) {
       return next(createHttpError(400, "Id is required."));
@@ -123,7 +124,8 @@ export const likePost = tryCatchHandler(
     if (!postExist) {
       return next(createHttpError(400, "Post not found."));
     }
-    if (postExist.likes.includes(_req.user._id.toString())) {
+    const userId = _req.user._id.toString(); 
+    if (postExist.likes.includes(userId)) {
       await postModel.findByIdAndUpdate(
         id,
         {

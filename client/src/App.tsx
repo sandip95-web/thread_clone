@@ -46,6 +46,7 @@ const App: FC = () => {
             </Routes>
           </Suspense>
         </BrowserRouter>
+        
       </Box>
     </>
   );
