@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store.ts";
 import { HelmetProvider } from "react-helmet-async";
 import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 const theme = createTheme({
   typography: {
     fontFamily: "'Orbitron', 'Helvetica', 'Arial', sans-serif",
