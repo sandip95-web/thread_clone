@@ -66,3 +66,6 @@ export interface updateProfileRequest {
   text: string;
   media: File;
 }
+export interface searchUserResponse{
+  users:myInfo[]
+}

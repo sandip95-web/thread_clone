@@ -6,6 +6,7 @@ import {
   newPostResponse,
   Post,
   PostResponse,
+  searchUserResponse,
 } from "./types";
 export interface ServiceState {
   openAddPostModal: boolean;
@@ -17,6 +18,7 @@ export interface ServiceState {
   user: myInfo | null;
   posts: Post[] | null;
   postId: string | null;
+  searchedUsers: myInfo[] | null;
 }
 
 const initialState: ServiceState = {
@@ -29,6 +31,7 @@ const initialState: ServiceState = {
   user: null,
   posts: null,
   postId: null,
+  searchedUsers: null,
 };
 
 export const serviceSlice = createSlice({
@@ -97,6 +100,15 @@ export const serviceSlice = createSlice({
       state.posts =
         state.posts?.filter((post) => post._id !== state.postId) || [];
     },
+    addPostId: (state, action: PayloadAction<string>) => {
+      state.postId = action.payload;
+    },
+    addToSearchedUsers: (
+      state,
+      action: PayloadAction<searchUserResponse | null>
+    ) => {
+      state.searchedUsers = action.payload?.users as myInfo[];
+    },
   },
 });
 
@@ -110,7 +122,9 @@ export const {
   getUserDetail,
   addToAllPosts,
   addSingle,
-  deletePost
+  deletePost,
+  addToSearchedUsers,
+  addPostId
 } = serviceSlice.actions;
 
 export default serviceSlice.reducer;
